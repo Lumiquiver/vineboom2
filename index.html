@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a1118" />
+  <meta name="description" content="VineBoom — a multiplayer FPS with custom loadouts, four game types, four weapon modes, and five distinct arenas." />
+  <title>VineBoom — Tactical FPS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/styles.css" />
+</head>
+<body>
+  <div id="bootLoader" class="boot-loader" role="status" aria-live="polite">
+    <div class="boot-backdrop-grid"></div><div class="boot-glow boot-glow-a"></div><div class="boot-glow boot-glow-b"></div>
+    <div class="boot-content">
+      <div class="boot-mark"><span>VB</span><i>↗</i></div>
+      <p class="boot-eyebrow"><span class="live-dot"></span> INITIALIZING COMBAT SYSTEMS</p>
+      <h1>VINE<span>BOOM</span></h1>
+      <p class="boot-subtitle">MULTIPLAYER FPS · FINAL RELEASE</p>
+      <div class="boot-progress"><i id="bootProgressBar"></i></div>
+      <div class="boot-progress-meta"><span id="bootStatus">Preparing your arena…</span><b id="bootPercent">08%</b></div>
+      <div class="boot-fact"><span>FIELD QUOTE</span><p id="bootFactText">The entire game was built in 3 hours.</p></div>
+      <div class="boot-studio">Created by <strong>KuchurPuchur Studios</strong></div>
+    </div>
+    <div class="boot-version">VB / 2.1.2 · RELEASE</div>
+  </div>
+  <canvas id="game-canvas" aria-label="VineBoom 3D game view"></canvas>
+  <div class="scanlines"></div>
+  <div id="menu" class="screen active">
+    <div class="menu-layout">
+      <section class="brand-panel">
+        <div class="brand-top"><span class="status-dot"></span> VINEBOOM COMBAT NETWORK <span id="buildTag">FINAL RELEASE</span></div>
+        <div class="brand-lockup"><div class="brand-mark">VB<span>↗</span></div><div class="wordmark">VINE<span>BOOM</span></div></div>
+        <p class="hero-kicker">TACTICAL FPS / MULTIPLAYER ARENAS</p>
+        <h1>OWN THE<br><em>LINE.</em></h1>
+        <p class="hero-copy">Five distinct combat zones. Four game types. Four weapon modes. Your loadout, your call.</p>
+        <div class="world-preview"><div class="world-preview-grid"></div><div class="preview-silhouette one"></div><div class="preview-silhouette two"></div><div class="preview-crosshair">+</div><div class="preview-label"><span id="previewMapName">METRO DISTRICT</span><small id="previewMapSub">DOWNTOWN · RAIL YARD · ROOFTOPS</small></div></div>
+        <div class="hero-foot"><span><i></i> ALL ARSENAL UNLOCKED</span><span>ROOM-BASED ONLINE</span><span>DESKTOP READY</span></div>
+      </section>
+      <section class="command-panel panel-glass">
+        <header class="panel-head"><div><span class="eyebrow">MISSION SETUP</span><h2>Deploy profile</h2></div><div class="player-level"><span>LVL</span><b id="level">01</b></div></header>
+        <div class="profile-grid">
+          <label class="field">CALLSIGN<input id="nameInput" maxlength="14" autocomplete="nickname" placeholder="Operator" /></label>
+          <label class="field">TEAM COLOR<input id="colorInput" type="color" value="#54a8e8" /></label>
+          <label class="field">HEADGEAR<select id="hatInput"><option value="0">None</option><option value="1">Crown</option><option value="2">Top hat</option><option value="3">Party cone</option><option value="4">Halo</option></select></label>
+        </div>
+        <details class="skin-details"><summary><span>CHARACTER SKIN</span><small>Minecraft 64×64 PNG / Java username</small></summary><div class="skin-controls"><canvas id="skinPreview" width="64" height="64"></canvas><div class="skin-actions"><label class="field skin-preset-field">DEFAULT SKIN<select id="skinPreset"><option value="vanguard">Vanguard</option><option value="night-ops">Night Ops</option><option value="desert-ranger">Desert Ranger</option><option value="arctic">Arctic Recon</option><option value="neon-recon">Neon Recon</option></select></label><label class="upload-button" for="skinFile">UPLOAD PNG</label><input id="skinFile" type="file" accept="image/png" hidden /><div class="inline-input"><input id="skinUsername" placeholder="Java username" maxlength="16" /><button id="loadSkin" class="button compact">LOAD</button></div><small id="skinStatus">Custom skins are optional.</small></div></div></details>
+        <div class="section-rule"><span>GAME CONFIGURATION</span><i></i></div>
+        <div class="setting-grid">
+          <label class="field">GAME TYPE<select id="gameType"><option value="tdm">TEAM DEATHMATCH</option><option value="ffa">FREE-FOR-ALL</option><option value="ctf">CAPTURE THE FLAG</option><option value="dom">DOMINATION</option></select></label>
+          <label class="field">GAME MODE<select id="playMode"><option value="all">ALL WEAPONS</option><option value="melee">MELEE ONLY</option><option value="pistol">PISTOL ONLY</option><option value="sniper">SNIPERS ONLY</option></select></label>
+          <label class="field">COMBAT ZONE<select id="mapSelect"></select></label>
+          <label class="field">SCORE LIMIT<select id="scoreLimit"><option>10</option><option>15</option><option selected>20</option><option>30</option><option>50</option></select></label>
+          <label class="field">MATCH LENGTH<select id="timeLimit"><option value="5">5 MIN</option><option value="8" selected>8 MIN</option><option value="10">10 MIN</option><option value="15">15 MIN</option><option value="20">20 MIN</option></select></label>
+          <label class="field">RESPAWN DELAY<select id="respawnDelay"><option value="2">2 SEC</option><option value="3">3 SEC</option><option value="4" selected>4 SEC</option><option value="5">5 SEC</option><option value="7">7 SEC</option><option value="10">10 SEC</option></select></label>
+          <label class="field">PERSONAL VEHICLE<select id="vehicleSelect"><option value="atlas-cycle">Atlas Ka Cycle</option><option value="yamaha-bike">Yamaha Bike</option><option value="royal-enfield">Royal Enfield</option><option value="decathlon-skateboard">Decathlon Skateboard</option><option value="rdx-hoverboard">RDX Hoverboard</option></select></label>
+        </div>
+        <div id="modeDescription" class="mode-description">Work with your squad. First team to the score limit wins.</div>
+        <div class="section-rule"><span>MULTIPLAYER ROOM</span><i></i></div>
+        <div class="online-actions"><button id="createRoom" class="button primary"><span>＋</span> CREATE ROOM</button><div class="join-row"><input id="roomCode" maxlength="4" placeholder="ROOM CODE" autocapitalize="characters" /><button id="joinRoom" class="button secondary">JOIN</button></div></div>
+        <button id="soloPlay" class="button solo-button"><span>▶</span> SOLO PRACTICE <small>BOT MATCH · PLAY OFFLINE</small></button>
+        <div id="lobbyPanel" class="lobby-panel hidden"><div class="lobby-head"><div><span class="eyebrow">ROOM READY</span><div class="room-code-view" id="roomCodeDisplay">----</div></div><div class="lobby-state"><span class="live-dot"></span><span id="roomStatus">WAITING FOR OPERATORS</span></div></div><div id="roster" class="roster"></div><div class="lobby-controls"><button id="readyButton" class="button secondary">MARK READY</button><button id="startMatch" class="button primary">START MATCH →</button></div><div class="share-help">Share the four-character room code with friends to bring them into your lobby.</div></div>
+        <div class="mini-stats"><div><small>ELIMINATIONS</small><b id="statKills">0</b></div><div><small>DEATHS</small><b id="statDeaths">0</b></div><div><small>K / D</small><b id="statKD">0.00</b></div><div><small>MATCHES</small><b id="statMatches">0</b></div><div><small>BEST STREAK</small><b id="statStreak">0</b></div></div>
+        <div class="prefs-controls"><label>SENSITIVITY <input id="sensitivity" type="range" min="0.3" max="3" step="0.1" value="1" /></label><label>MASTER VOLUME <input id="volume" type="range" min="0" max="1" step="0.05" value="0.5" /></label><label>GRAPHICS <select id="quality"><option value="high">HIGH</option><option value="medium">MEDIUM</option><option value="low">LOW</option></select></label></div>
+        <details class="keybind-details"><summary>CONTROLS & KEY BINDINGS <span>＋</span></summary><div id="keybinds" class="keybind-grid"></div><div class="keybind-note">Click a binding, then press any key. Movement is desktop keyboard + mouse.</div></details>
+        <div class="music-controls"><div class="music-copy"><span class="music-icon">♫</span><div><b>BACKGROUND MUSIC</b><small id="musicTrackName">NEON PATROL</small></div></div><button id="musicToggle" class="button secondary compact" type="button" aria-pressed="true">MUSIC ON</button><button id="musicNext" class="button secondary compact" type="button">NEXT TRACK ↗</button></div>
+        <footer class="panel-footer"><span>CREATED BY KUCHURPUCHUR STUDIOS</span><span id="connectionStatus">READY TO PLAY</span></footer>
+      </section>
+    </div>
+  </div>
+
+  <div id="loadoutScreen" class="screen hidden">
+    <div class="loadout-shell panel-glass">
+      <header class="loadout-header"><div><span class="eyebrow">PRE-MATCH ARMORY</span><h2>Build your loadout</h2><p>Equip exactly two guns and one melee weapon. Everything is unlocked.</p></div><div class="loadout-badge"><span>ARSENAL</span><strong>20</strong><small>WEAPONS</small></div></header>
+      <div class="loadout-tabs"><button class="loadout-tab active" data-tab="guns">01 / PRIMARY GUNS <b>2 SLOTS</b></button><button class="loadout-tab" data-tab="melee">02 / MELEE <b>1 SLOT</b></button></div>
+      <div class="loadout-body"><aside class="weapon-browser"><div class="browser-heading"><span id="weaponCategoryTitle">SELECT TWO GUNS</span><small id="weaponCategoryHelp">Click a weapon to assign it to the active gun slot.</small></div><div id="weaponList" class="weapon-list"></div></aside><section class="weapon-inspector"><div class="weapon-preview-stage"><canvas id="weaponPreview" width="420" height="170"></canvas><div class="preview-scan"></div><div class="preview-stage-caption"><span id="previewType">RIFLE CLASS</span><span id="previewSlot">GUN SLOT 1</span></div></div><div class="weapon-title-row"><div><span class="eyebrow" id="weaponEyebrow">ASSAULT PLATFORM</span><h3 id="weaponName">Assault Rifle</h3><p id="weaponDescription">Versatile full-auto rifle.</p></div><div class="weapon-damage"><b id="weaponDamage">19</b><small>DAMAGE</small></div></div><div class="stats-list"><div class="stat-bar"><span>POWER</span><div><i id="barPower"></i></div><b id="statPower">67</b></div><div class="stat-bar"><span>ACCURACY</span><div><i id="barAccuracy"></i></div><b id="statAccuracy">77</b></div><div class="stat-bar"><span>HANDLING</span><div><i id="barHandling"></i></div><b id="statHandling">74</b></div><div class="stat-bar"><span>FIRE RATE</span><div><i id="barFireRate"></i></div><b id="statFireRate">520</b></div></div><div class="equipped-row"><div class="equipped-slot selected" data-loadout-slot="0"><small>GUN SLOT 1</small><b id="equippedGun1">Assault Rifle</b><span id="gun1Ammo">30 / 150</span></div><div class="equipped-slot" data-loadout-slot="1"><small>GUN SLOT 2</small><b id="equippedGun2">Pistol</b><span id="gun2Ammo">15 / 90</span></div><div class="equipped-slot" data-loadout-slot="2"><small>MELEE SLOT</small><b id="equippedMelee">Combat Knife</b><span>NO AMMO</span></div></div><div id="loadoutModeWarning" class="mode-warning"></div></section></div>
+      <footer class="loadout-footer"><button id="backFromLoadout" class="button ghost">← BACK</button><div class="loadout-confirm-note"><span class="status-dot"></span><span id="loadoutConfirmText">LOADOUT READY TO CONFIRM</span></div><button id="confirmLoadout" class="button primary confirm-button">CONFIRM & DEPLOY <span>→</span></button></footer>
+    </div>
+  </div>
+
+  <div id="hud" class="hud hidden">
+    <div class="hud-top-left"><div class="match-chip"><span class="live-dot"></span><span id="hudGameType">TEAM DEATHMATCH</span><b id="hudMode">ALL WEAPONS</b></div><div id="objectiveStatus" class="objective-status"></div></div>
+    <div class="hud-top-center"><div class="team-score" id="teamScoreBlue"><small>BLUE</small><b>0</b></div><div class="match-clock"><b id="matchClock">08:00</b><small id="matchPhase">MATCH LIVE</small></div><div class="team-score red" id="teamScoreRed"><small>RED</small><b>0</b></div></div>
+    <div id="killFeed" class="kill-feed"></div>
+    <div id="scopeOverlay" class="scope-overlay" aria-hidden="true"><div class="scope-glass"></div><div class="scope-cross"><i></i><i></i><b></b></div><span class="scope-label">OPTICAL SYSTEM</span></div><div class="center-reticle"><span></span><span></span><span></span><span></span><b id="hitMarker">×</b></div>
+    <button id="controlsToggle" class="controls-toggle" type="button" aria-expanded="true">CONTROLS −</button><div id="controlsCard" class="controls-card"><b>FIELD CONTROLS</b><span>W A S D · MOVE</span><span>SHIFT · SPRINT</span><span>C / Z · CROUCH / CRAWL</span><span>CTRL · SLIDE</span><span>V · BACKFLIP</span><span>G · TRIP</span><span>R · RELOAD CURRENT GUN</span><span>1 / 2 / 3 · WEAPON</span><span>RMB · AIM / SCOPE</span><span>H · VEHICLE ON / OFF</span><span>F · INTERACT</span><span>Y · THROW / PICK UP MELEE</span></div>
+    <div class="hud-bottom-left"><div class="player-condition"><span class="condition-icon">＋</span><div><small>VITALS</small><b id="healthValue">100</b></div><div class="meter"><i id="healthMeter"></i></div></div><div class="player-condition shield-condition"><span class="condition-icon">⬡</span><div><small>SHIELD</small><b id="shieldValue">0</b></div><div class="meter"><i id="shieldMeter"></i></div></div><div id="staminaBar" class="stamina-bar"><span>STAMINA</span><i><b id="staminaFill"></b></i></div></div>
+    <div class="hud-bottom-center"><div id="killstreakHud" class="killstreak-hud"><div class="killstreak-label"><b><span id="killstreakValue">0</span> KILL STREAK</b><span id="killstreakNext">5 KILLS → V’S EYE VIEW</span></div><i class="killstreak-track"><em id="killstreakFill"></em></i></div><div id="powerupHud" class="powerup-hud"></div><div class="interaction-hint" id="interactionHint"></div></div>
+    <div class="hud-bottom-right"><div class="ammo-row"><div><small id="weaponCategoryHud">RIFLE</small><h3 id="weaponHud">ASSAULT RIFLE</h3></div><div class="ammo-count"><b id="ammoCurrent">30</b><span>/</span><small id="ammoReserve">150</small></div></div><div class="weapon-slots"><div class="weapon-slot active" data-hud-slot="0"><small>1</small><span id="hudGun1">RIFLE</span></div><div class="weapon-slot" data-hud-slot="1"><small>2</small><span id="hudGun2">PISTOL</span></div><div class="weapon-slot" data-hud-slot="2"><small>3</small><span id="hudMelee">KNIFE</span></div></div></div>
+    <div id="damageOverlay" class="damage-overlay"></div><div id="centerMessage" class="center-message"></div>
+    <div id="scoreboard" class="scoreboard hidden"><div class="scoreboard-card panel-glass"><header><div><span class="eyebrow">FIELD REPORT</span><h2>Scoreboard</h2></div><div id="scoreboardRoom">LOCAL MATCH</div></header><div id="scoreboardContent"></div><footer>PRESS <b>TAB</b> TO CLOSE</footer></div></div>
+    <div id="pausePanel" class="pause-panel hidden"><div class="pause-card panel-glass"><span class="eyebrow">PAUSED</span><h2>Regroup.</h2><p>Take a breath. The field is waiting.</p><button id="resumeMatch" class="button primary">RESUME MATCH</button><button id="switchTeamButton" class="button secondary">SWITCH TEAM</button><div class="pause-music-row"><span><b>♫ MUSIC</b><small id="musicTrackPauseName">NEON PATROL</small></span><button id="musicTogglePause" class="button secondary compact" type="button" aria-pressed="true">MUSIC ON</button><button id="musicNextPause" class="button secondary compact" type="button">NEXT TRACK</button></div><button id="leaveMatch" class="button secondary">LEAVE MATCH</button></div></div>
+    <div id="deathPanel" class="death-panel hidden"><div class="death-card panel-glass"><span class="eyebrow">OPERATOR DOWN</span><h2>Re-deploying<span id="deathCountdown">4</span></h2><p id="deathCause">You were eliminated in combat.</p><div class="death-loadout"><label class="field">GUN 1<select id="respawnGun1"></select></label><label class="field">GUN 2<select id="respawnGun2"></select></label><label class="field">MELEE<select id="respawnMelee"></select></label></div><button id="deployNow" class="button primary">CONFIRM LOADOUT & DEPLOY</button><small>Loadout can be changed during this countdown only.</small></div></div>
+    <div id="matchEndPanel" class="match-end-panel hidden"><div class="match-end-card panel-glass"><span class="eyebrow">MISSION COMPLETE</span><h2 id="matchEndTitle">VICTORY</h2><p id="matchEndDescription">The operation is over.</p><div id="matchEndStats"></div><button id="returnLobby" class="button primary">RETURN TO LOBBY</button></div></div>
+  </div>
+  <div id="toastStack" class="toast-stack" aria-live="polite"></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
